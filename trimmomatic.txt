@@ -1,0 +1,12 @@
+TRIMMOMATIC
+
+- Trimmomatic jar file and adapter directory was copied to the folder from which we are running the program.
+
+
+java -jar trimmomatic-0.35.jar PE Sus-51_S207_concat_R1.fastq.gz Sus-51_S207_concat_R2.fastq.gz Sus-51-R1_paired.fq.gz Sus-51-R1_unpaired.fq.gz Sus-51-R2_paired.fq.gz Sus-51-R2_unpaired.fq.gz ILLUMINACLIP:NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+
+
+
+LOOP!!!!!!!!!!
+
+for f in *concat_R1*gz; do f2=${f/R1/R2}; r1p=${f/concat/paired}; r1u=${f/concat/unpaired}; r2p=${f2/concat/paired}; r2u=${f2/concat/unpaired}; java -jar trimmomatic-0.35.jar PE $f $f2 $r1p $r1u $r2p $r2u ILLUMINACLIP:NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36; done

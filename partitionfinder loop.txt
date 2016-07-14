@@ -1,0 +1,3 @@
+Run partition finder looping over directories;
+
+for dir in */; do python <PartitionFinder.py> $dir; done

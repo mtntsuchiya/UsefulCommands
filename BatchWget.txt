@@ -1,0 +1,9 @@
+#Command: wget -i url_list.txt #
+http://data.macrogen.com/HiSeq02/201507/1505KHS-0065/P-lotor-usnm-570161_1-1_1.fastq.gz
+http://data.macrogen.com/HiSeq02/201507/1505KHS-0065/P-lotor-usnm-570161_1-1_2.fastq.gz
+http://data.macrogen.com/HiSeq02/201507/1505KHS-0065/P-lotor-usnm-570161_1-2_1.fastq.gz
+http://data.macrogen.com/HiSeq02/201507/1505KHS-0065/P-lotor-usnm-570161_1-2_2.fastq.gz
+http://data.macrogen.com/HiSeq02/201507/1505KHS-0065/P-lotor-usnm-570161_2-3kb_1.fastq.gz
+http://data.macrogen.com/HiSeq02/201507/1505KHS-0065/P-lotor-usnm-570161_2-3kb_2.fastq.gz
+http://data.macrogen.com/HiSeq02/201507/1505KHS-0065/P-lotor-usnm-570161_3-8kb_1.fastq.gz
+http://data.macrogen.com/HiSeq02/201507/1505KHS-0065/P-lotor-usnm-570161_3-8kb_2.fastq.gz

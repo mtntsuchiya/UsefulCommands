@@ -1,0 +1,148 @@
+# Useful Commands #
+
+## List files in a directory ##
+ls
+
+## Create a new folder ##
+mkdir [name]
+
+## Go to a folder ##
+cd [folder name or path]
+
+## Go to a folder above ##
+cd ..
+
+## Move files
+mv [what] [where]
+# Example: mv file1.txt ./draft
+
+# Move folder
+mv -v [what] [where]
+
+## Copy files
+cp [what] [where]
+
+# Copy folders
+cp -r [what] [where]
+
+## Delete files
+rm [what]
+
+## WILDCARDS ##
+* : replace any character and any number of characters in a search
+	Example: mv Sus*.fastq.gz ./susette
+	Meaning: Move all files that start with "Sus" and end in "fastq.gz", independent of anything else, to the folder "susette"
+
+? : similar to *, but more restrictive. You must specify the correct number of characters for it to work. 
+	Example: mv Sus-??_S???_concat*.fastq.gz ./concat
+	Meaning: Move all files that start in "Sus-" that have any two characters (??), followed by "_S" plus three characters, then "_concat", then any number of characters, ending in fastq.gz
+
+
+
+
+
+
+# Analysis pipeline
+
+1. Download the files
+2. If you have more than one lane per read (L001_R1 & L002_R1), you should concatenate them. 
+
+# Concatenate files
+cat [file1name] [file2name] ... > [file_concatname]	
+
+# Concatenate files in different subfolders (loop)
+
+## Here we are doing this in two steps;
+
+for dir in */; do cd $dir; for f in *L001_R1*; do s=${f/L001/L002}; o=${f/L001_R1_001/concat_R1}; cat $f $s > $o; cd .. ; done; done
+
+for dir in */; do cd $dir; for f in *L001_R2*; do s=${f/L001/L002}; o=${f/L001_R2_001/concat_R2}; cat $f $s > $o; cd .. ; done; done
+
+## Madhvi's command:
+
+for dir in */;
+do
+    cd $dir
+    cat *_L???_R1_*.fastq.gz > ${dir%-*}_R1.fastq.gz
+    cat *_L???_R2_*.fastq.gz > ${dir%-*}_R2.fastq.gz
+    cd .. 
+done;
+
+3. Before running fastQC, we moved all the concatenated files to the same folder:
+
+mv **/*concat*.gz ./concat/
+
+If you want to copy instead, replace "mv" by "cp"
+
+4. Quality assessment with FastQC (from the concat folder)
+
+fastqc *
+
+	4.1 mkdir fastqc_results
+	4.2 mv *.html ./fastqc_results
+	4.3 mv *.zip ./fastqc_results
+	4.4 To visualize the results, go to the folder fastqc_results on Finder, organize the folder by file type, click on one of the html files, press the spacebar to preview. If you move down with the arrows, you'll be able to see every file.
+
+5. If necessary, run trimmomatic to solve any quality issues. The exemple below was used to remove adapters.
+
+	5.1 Trimmomatic jar file (trimmomatic-0.35.jar) and adapter file (in this case, it was the NexteraPE-PE.fa) was copied to the folder from which we are running the program.
+
+
+For one sample paired end: 
+
+java -jar trimmomatic-0.35.jar PE Sus-51_S207_concat_R1.fastq.gz Sus-51_S207_concat_R2.fastq.gz Sus-51-R1_paired.fq.gz Sus-51-R1_unpaired.fq.gz Sus-51-R2_paired.fq.gz Sus-51-R2_unpaired.fq.gz ILLUMINACLIP:NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+
+For single end sequence:
+java -jar trimmomatic-0.30.jar SE input.fq.gz output.fq.gz ILLUMINACLIP:NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
+
+LOOP!!!!!!!!!!
+
+for f in *concat_R1*gz; do f2=${f/R1/R2}; r1p=${f/concat/paired}; r1u=${f/concat/unpaired}; r2p=${f2/concat/paired}; r2u=${f2/concat/unpaired}; java -jar trimmomatic-0.35.jar PE $f $f2 $r1p $r1u $r2p $r2u ILLUMINACLIP:NexteraPE-PE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36; done
+
+6. FastQC again on the trimmed files
+
+7. Index reference sequence
+bwa index ref_sequence.fasta
+
+8. Mapping 
+
+For single-end sequences
+bwa mem ref_sequence.fasta filename.fastq.gz > fileout.sam
+
+For paired end sequences:
+bwa mem ref_sequence.fasta read1.fastq.gz read2.fastq.gz > output_bwa.sam
+
+LOOP:
+for f1 in Sus*R1.fastq.gz; do f2=${f1/R1/R2}; bwa mem ../bwa/ref/urocyon.fasta $f1 $f2 > ../bwa/$(basename $f1 R1.fastq.gz)mapped.sam; done
+
+EXPLANATION: 
+$(basename $f1 R1.fastq.gz)mapped.sam = use the name of the file $f1, remove "R1.fastq.gz"; add the extension "mapped.sam"
+
+9. Convert sam to bam
+	9.1 Create a bam folder:  mkdir bam
+	
+For single file:
+samtools view -bS filename.sam > filename.bam
+
+Loop:
+for f in *.sam; do samtools view -bS $f > ../bam/$(basename $f .sam).bam; done
+
+10. Import bam files to Geneious (drag and drop)
+	
+	Important things:
+		10.1: Import your reference file first. 
+			a) Find in Geneious your reference sequence from Genbank (the same one you used and download it with all the annotations);
+			b) Align your fasta reference to the one downloaded from Genbank
+			c) Transfer all the annotations to the fasta sequence and save it. Choose to apply the changes to the original sequence.
+			
+11. Evaluate your sequences based on coverage, quality, translation.
+
+12. Extract the consensus
+
+
+
+
+
+
+
+

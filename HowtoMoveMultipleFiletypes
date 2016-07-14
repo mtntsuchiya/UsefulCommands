@@ -1,0 +1,4 @@
+#Move or copy more than one type of file at the same time
+
+cp -v *.type1 *.type2 destination
+mv -v *.type1 *.type2 destination

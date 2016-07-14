@@ -1,0 +1,1 @@
+for f in *; do sample1=${f/cMTNT-/}; sample=${sample1/_interleaved.fastq.gz/}; mkdir -p "$sample"; mv "$f" "$sample"; done

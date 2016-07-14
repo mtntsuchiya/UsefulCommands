@@ -1,0 +1,29 @@
+for dir in */;
+do cd $dir;
+cd $(ls | grep '^iteration[0-9]\+$' | cut -c10-| sort -n| tail -n1 | sed 's|^|iteration|');
+assembly=$(find -maxdepth 1 -type d -name "cMTNT*assembly" | head -1); cd $assembly
+results=$(find -maxdepth 1 -type d -name "cMTNT*results" | head -1); cd $results;
+echo $dir; 
+cp cMTNT*Nna_out*cMTNT*.unpadded* /pool/genomics/tsuchiyam/mitogenomes/results;
+cd /pool/genomics/tsuchiyam/mitogenomes/interleaved;
+done;
+
+Description:
+for all subfolders in the current directory;
+go to each directory;
+go to the directory (cd) that matches the following description (grep):
+	starts (^) with 'iteration', followed by numbers [0-9]
+	the plus symbol means that the previous pattern will appear at least once before the end ($) of the name
+	cut -c10-: excludes the first nine characters, start on character 10
+	sort -n: sort the result from 'cut' (above)
+	tail -n1: select the last (n1) element of the sorted list
+	sed 's|^|iteration|': add the word "iteration" to the result of tail (above)
+	OBS: we need to use ls so the folder that matches the requirement is listed and we can cd to it
+create the variable $assembly (same applies for $results)
+	find -maxdepth 1 (maxdepth determines how many levels down to search; level 1 is the root)
+		-type d (directory)
+		-name 
+		-head (print the result of the search)
+copy the file that matches the description to an specified location
+go to folder
+close the loop

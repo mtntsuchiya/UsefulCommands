@@ -1,0 +1,11 @@
+# Batch rename in UNIX: 
+
+#Replace spaces by underscore:
+
+$ for f in *; do mv "$f" "${f// /_}"; done
+
+# Replace - by _
+$ for f in *; do mv "$f" "${f//-/_}"; done
+
+# Replace fastq.gz_trimmed.fastq.gz by fastq.gz
+$ for f in *; do mv $f ${f/"fastq.gz_trimmed.fastq.gz"/"_trimmed.fastq.gz"}; done

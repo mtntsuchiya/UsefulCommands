@@ -1,0 +1,6 @@
+#How to copy from local disk to server
+
+$ scp [sourcefile] [user@server: folder]
+
+Example: 
+$ scp raccoon_platanus_contig.job tsuchiyam@hydra-login01.si.edu:/pool/genomics/tsuchiyam/raccoon

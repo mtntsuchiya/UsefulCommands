@@ -1,0 +1,6 @@
+Logging to hydra
+
+ssh tsuchiyam@hydra-login01.si.edu 
+
+Other options: 	hydra-login02.si.edu 
+				hydra-3.si.edu

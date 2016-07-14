@@ -1,0 +1,12 @@
+#Copying files from the server#
+
+Command:
+$ scp username@server:filepath [destination]
+
+Example:
+$ scp tsuchiyam@hydra-login01.si.edu:/pool/genomics/tsuchiyam/raccoon/filename .
+
+# To copy a folder, just add -r
+
+Example: 
+$ scp -r tsuchiyam@hydra-login01.si.edu:/pool/genomics/tsuchiyam/kinkajou/quast_kinkajou .

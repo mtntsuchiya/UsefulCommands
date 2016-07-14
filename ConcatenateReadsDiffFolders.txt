@@ -1,0 +1,6 @@
+HOW TO CONCATENATE READS FROM DIFFERENT LANES IN DIFFERENT SUBFOLDERS
+
+
+for dir in */; do cd $dir; for f in *L001_R1*; do s=${f/L001/L002}; o=${f/L001_R1_001/concat_R1}; cat $f $s > $o; cd .. ; done; done
+
+for dir in */; do cd $dir; for f in *L001_R2*; do s=${f/L001/L002}; o=${f/L001_R2_001/concat_R2}; cat $f $s > $o; cd .. ; done; done

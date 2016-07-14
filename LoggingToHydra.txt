@@ -1,0 +1,22 @@
+Login to Hydra
+
+$ ssh tsuchiyam@hydra-login01.si.edu (@hydra-login02.si.edu; hydra-3.si.edu)
+Password: Kinkajous ARE Awesome
+
+Change nodes: 
+$ ssh hydra-login02	(or hydra-login01; hydra-3)
+
+End session: Control + d
+
+Change password: 
+$ passwd
+
+Check job status: 
+$ qstat -u tsuchiyam
+
+Kill a job
+$ qdel <job_number>
+
+
+
+
